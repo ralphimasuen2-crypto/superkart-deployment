@@ -48,20 +48,20 @@ def predict_sales():
     # Define an endpoint to predict sales for a batch of products
     @superkart_api.post('/v1/predict_batch')
     def predict_sales_batch():  
-    # Get the uploaded CSV file from the request
-      file = request.files['file']
+        # Get the uploaded CSV file from the request
+        file = request.files['file']
 
-    # Read the file into a DataFrame
-    input_datadata = pd.read_csv(file)
+        # Read the file into a DataFrame
+        input_data = pd.read_csv(file)
 
-    # Make predictions for the batch data
-    prediction = model.predict(input_data).tolist()
+        # Make predictions for the batch data
+        prediction = model.predict(input_data).tolist()
 
-    # Create an output dictionary mapping row index to predicted sales
-    output_dict = {str(i): round(pred, 2) for i, pred in enumerate(prediction)}
+        # Create an output dictionary mapping row index to predicted sales
+        output_dict = {str(i): round(pred, 2) for i, pred in enumerate(prediction)}
 
-    return output_dict
+        return output_dict
 
     # Run the Flask app in debug mode
     if __name__ == '__main__':
-        superkart_api.run(debug=True)
+        superkart_api.run(host="0.0.0.0", port=5000)
