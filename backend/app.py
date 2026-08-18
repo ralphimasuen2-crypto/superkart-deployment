@@ -25,11 +25,11 @@ def predict_sales():
     # Extract relevant features from the input data
     sample = {
         "Product_Weight": data["Product_Weight"],
-        "Product_Sugar_Content": data["Product_Sugar_Content"],
+        "Product _Sugar_Content": data["Product _Sugar_Content"],
         "Product_Allocated_Area": data["Product_Allocated_Area"],
         "Product_MRP": data["Product_MRP"],
         "Store_Size": data["Store_Size"],
-        "Store_Location_City_Type": data["Store_Location_City_Type"],
+        "Store_Location_Type": data["Store_Location_Type"],
         "Store_Type": data["Store_Type"],
         "Product_Id_Char": data["Product_Id_Char"],
         "Store_Age_Years": data["Store_Age_Years"],
@@ -46,22 +46,22 @@ def predict_sales():
     return jsonify({"Sales": prediction})
 
     # Define an endpoint to predict sales for a batch of products
-    @superkart_api.post('/v1/predictbatch')
-    def predict_sales_batch():  
-        # Get the uploaded CSV file from the request
-        file = request.files['file']
+    @superkart_api.post('/v1/predict_batch')
+    def predict_sales_batch():
+    # Get the uploaded CSV file from the request
+      file = request.files['file']
 
-        # Read the file into a DataFrame
-        input_data = pd.read_csv(file)
-      
-        # Make predictions for the batch data
-        prediction = model.predict(input_data).tolist()
+    # Read the file into a DataFrame
+    input_datadata = pd.read_csv(file)
 
-        # Create an output dictionary mapping row index to predicted sales
-        output_dict = {str(i): round(pred, 2) for i, pred in enumerate(prediction)}
+    # Make predictions for the batch data
+    prediction = model.predict(input_data).tolist()
 
-        return output_dict
+    # Create an output dictionary mapping row index to predicted sales
+    output_dict = {str(i): round(pred, 2) for i, pred in enumerate(prediction)}
+
+    return output_dict
 
     # Run the Flask app in debug mode
     if __name__ == '__main__':
-        superkart_api.run(host="0.0.0.0", port=7860)
+        superkart_api.run(debug=True)
