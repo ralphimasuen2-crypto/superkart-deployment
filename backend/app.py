@@ -46,14 +46,14 @@ def predict_sales():
     return jsonify({"Sales": prediction})
 
     # Define an endpoint to predict sales for a batch of products
-    @superkart_api.post('/v1/predict_batch')
+    @superkart_api.post('/v1/predictbatch')
     def predict_sales_batch():  
         # Get the uploaded CSV file from the request
         file = request.files['file']
 
         # Read the file into a DataFrame
         input_data = pd.read_csv(file)
-
+      
         # Make predictions for the batch data
         prediction = model.predict(input_data).tolist()
 
