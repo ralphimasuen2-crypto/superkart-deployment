@@ -64,4 +64,4 @@ def predict_sales():
 
     # Run the Flask app in debug mode
     if __name__ == '__main__':
-        superkart_api.run(host="0.0.0.0", port=5000)
+        superkart_api.run(host="0.0.0.0", port=7860)
