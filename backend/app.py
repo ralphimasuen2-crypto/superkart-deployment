@@ -25,11 +25,11 @@ def predict_sales():
     # Extract relevant features from the input data
     sample = {
         "Product_Weight": data["Product_Weight"],
-        "Product _Sugar_Content": data["Product _Sugar_Content"],
+        "Product_Sugar_Content": data["Product_Sugar_Content"],
         "Product_Allocated_Area": data["Product_Allocated_Area"],
         "Product_MRP": data["Product_MRP"],
         "Store_Size": data["Store_Size"],
-        "Store_Location_Type": data["Store_Location_Type"],
+        "Store_Location_City_Type": data["Store_Location_City_Type"],
         "Store_Type": data["Store_Type"],
         "Product_Id_Char": data["Product_Id_Char"],
         "Store_Age_Years": data["Store_Age_Years"],
