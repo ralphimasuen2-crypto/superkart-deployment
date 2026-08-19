@@ -17,19 +17,19 @@ Product_Allocated_Area = st.number_input("Product Allocated Area",min_value=0.0,
 Product_MRP = st.number_input("Product MRP", min_value=0.0, value=117.08)
 Store_Size = st.selectbox("Store Size", ["Small", "Medium", "Large"])
 Store_Location_City_Type = st.selectbox("Store Location City Type", ["Tier 1", "Tier 2", "Tier 3"])
-Store_Type = st.selectbox("Store_Type", ["SupermarketType1", "SupermarketType2", "SupermarketType3" "Departmental Store", "Food Mart"])
-Product_Id_Char = st.selectbox("Product ID Character" ["FD", "DR", "NC"])
+Store_Type = st.selectbox("Store_Type", ["SupermarketType1", "SupermarketType2", "SupermarketType3", "Departmental Store", "Food Mart"])
+Product_Id_Char = st.selectbox("Product ID Character", ["FD", "DR", "NC"])
 Store_Age_Years = st.number_input("Store Age (Years)", min_value=0.0, value=16)
-Product_Type_Category = st.selectbox("Product Type Category", ["Perishables", "Non Perishables"])
+Product_Type_Category = st.selectbox("Product Type Category", ["Perishable", "Non-Perishable"])
 
 # Create JSON payload
 payload = {
     "Product_Weight": Product_Weight,
-    "Product _Sugar_Content": Product_Sugar_Content,
+    "Product_Sugar_Content": Product_Sugar_Content,
     "Product_Allocated_Area": Product_Allocated_Area,
     "Product_MRP": Product_MRP,
     "Store_Size": Store_Size,
-    "Store_Location_Type": Store_Location_City_Type,
+    "Store_Location_City_Type": Store_Location_City_Type,
     "Store_Type": Store_Type,
     "Product_Id_Char": Product_Id_Char,
     "Store_Age_Years": Store_Age_Years,
@@ -38,14 +38,13 @@ payload = {
 
 # Single Prediction
 if st.button("Predict", type="primary"):
-    response = requests.post(f"{BACKEND_URL}/v1/predict", json=product_data
-    )
+    response = requests.post(f"{BACKEND_URL}/v1/predict", json=payload)
     if response.status_code==200:
       result=response.json()
       predicted_sales = result["Sales"]
       st.success(f"Predicted Product Store Sales Total: {predicted_sales:.2f}")
     else:
-      st.error("Unable to connect to the prediction API.")
+      st.error(f"Unable to connect to the prediction API. Status Code: {response.status_code}, Response: {response.text}")
 
 # Batch Prediction
 st.subheader("Batch Prediction")
@@ -55,7 +54,7 @@ if uploaded_file is not None:
 
         response = requests.post(f"{BACKEND_URL}/v1/predictbatch", files={"file":uploaded_file})
         if response.status_code == 200:
-            result = response.json()
+            results = response.json()
             st.success("Prediction completed successful!")
             try:
                 if isinstance(results, list):
@@ -65,15 +64,15 @@ if uploaded_file is not None:
                      if all(not isinstance(v, (list, dict)) for v in results.values()):
                          df=pd.DataFrame([results])
                      else:
-                         df=pd.DataFrame(result)
+                         df=pd.DataFrame(results)
                 else:
                      df=pd.DataFrame({"Result": [results]})
 
-                     st.dataframe(df, use_container_width=True)
+                st.dataframe(df, use_container_width=True)
 
             except Exception as e:
                 st.error(f"Unable to display results as in table: {e}")
-                st.json(result)
+                st.json(results)
 
         else:
-            st.error("Unable to connect to the prediction API.")
+            st.error(f"Unable to connect to the prediction API. Status Code: {response.status_code}, Response: {response.text}")
